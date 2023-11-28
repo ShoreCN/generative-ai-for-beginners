@@ -5,11 +5,11 @@
 
 如何撰写 LLM 的提示很重要，精心设计的提示可以比不精心设计的提示取得更好的结果。 但这些概念到底是什么，提示、提示工程以及我如何改进我发送给 LLMs 的内容？ 诸如此类的问题正是本章和下一章想要解答的。
 
-_生成式人工智能_能够根据用户请求创建新内容（例如文本、图像、音频、代码等）。 它使用 LLMs 来实现这一目标，例如 OpenAI 的 GPT 模型系列，这些模型通过使用自然语言和代码进行训练。
+_生成式人工智能_ 能够根据用户请求创建新内容（例如文本、图像、音频、代码等）。 它使用 LLMs 来实现这一目标，例如 OpenAI 的 GPT 模型系列，这些模型通过使用自然语言和代码进行训练。
 
-用户现在可以使用熟悉的语言（如聊天）与这些模型进行交互，而无需任何技术专业知识或培训。 这些模型是基于提示的——用户发送文本输入（提示）并获取人工智能响应（完成）。 然后，他们可以在多轮对话中迭代地“与人工智能聊天”，完善他们的提示，直到响应符合他们的预期。
+用户现在可以使用熟悉的语言（如聊天）与这些模型进行交互，而无需任何技术专业知识或培训。 这些模型是基于提示的——用户发送文本输入（提示）并获取人工智能响应（补全）。 然后，他们可以在多轮对话中迭代地“与人工智能聊天”，完善他们的提示，直到响应符合他们的预期。
 
-“提示”现在成为生成式人工智能应用程序的主要_编程界面_，告诉模型要做什么并影响返回响应的质量。 “提示工程”是一个快速发展的研究领域，专注于提示的“设计和优化”，以大规模提供一致且高质量的响应。
+“提示”现在成为生成式人工智能应用程序的主要 _编程界面_，告诉模型要做什么并影响返回响应的质量。 “提示工程”是一个快速发展的研究领域，专注于提示的“设计和优化”，以大规模提供一致且高质量的响应。
 
 ## 学习目标
 
@@ -26,7 +26,7 @@ _生成式人工智能_能够根据用户请求创建新内容（例如文本、
 
 目前，提示工程更多的是玄学而不是科学。 提高我们直觉的最佳方法是“更多练习”并采用试错方法，将应用程序领域的专业知识与推荐的技术和特定于模型的优化相结合。
 
-本课程附带的 Jupyter Notebook 提供了一个_沙盒_环境，您可以在其中尝试所学内容 - 边学边做，或者作为最后代码挑战的一部分。 要完成练习，您需要：
+本课程附带的 Jupyter Notebook 提供了一个 _沙盒_ 环境，您可以在其中尝试所学内容 - 边学边做，或者作为最后代码挑战的一部分。 要完成练习，您需要：
 
 1. 设置 OpenAI API 密钥 - 已部署的 LLM 的服务端点。
 
@@ -34,21 +34,21 @@ _生成式人工智能_能够根据用户请求创建新内容（例如文本、
 
 我们使用一个带有 Python 3 运行时的开发容器来检测这个存储库。 只需在 GitHub Codespaces 或本地 Docker 桌面上打开 Repo，即可自动激活运行时。 然后打开笔记本并选择Python 3.x 内核以准备 Notebook。
 
-默认 Notebook 设置为与 OpenAI API 密钥一起使用。 只需将文件夹根目录中的“.env.copy”文件复制到“.env”，并使用您的 API 密钥更新“OPENAI_API_KEY=”行 - 一切就完成了。
+默认 Notebook 设置为与 OpenAI API 密钥一起使用。 只需将文件夹根目录中的`.env.copy`文件复制到`.env`，并使用您的 API 密钥更新`OPENAI_API_KEY=`行 - 一切就完成了。
 
-该 Notebook  附带入门练习 - 但我们鼓励您添加自己的Markdown描述）和代码（提示请求）部分来尝试更多示例或想法 - 并建立您对提示工程设计的感觉。
+该 Notebook 附带入门练习 - 但我们鼓励您添加自己的 _Markdown_（描述）和 _代码_（提示请求）部分来尝试更多示例或想法 - 并建立您对提示工程设计的感觉。
 
 
 ## Our Startup 的使命
 
 
-现在，让我们来谈谈这个主题与 Our Startup 的使命[将人工智能创新带入教育]有何关系(https://educationblog.microsoft.com/2023/06/collaborating-to-bring-ai-innovation-to-education) 。 我们希望构建由人工智能驱动的个性化学习应用程序 - 所以让我们考虑一下我们应用程序的针对不同用户如何“设计”提示：
+现在，让我们来谈谈这个主题与 Our Startup 的[将人工智能创新带入教育](https://educationblog.microsoft.com/2023/06/collaborating-to-bring-ai-innovation-to-education)的使命有何关系。 我们希望构建由人工智能驱动的个性化学习应用程序 - 所以让我们考虑一下我们的应用程序针对不同用户如何“设计”提示：
 
-- **管理员**可能会要求人工智能分析课程数据以识别覆盖范围的差距_。 人工智能可以总结结果或用代码将其可视化。
-- **教育者**可能会要求人工智能为目标受众和主题生成教学计划。 AI可以按照指定的格式构建个性化计划。
-- **学生**可能会要求人工智能辅导他们学习困难的科目。 人工智能现在可以通过适合学生水平的课程、结合提示和示例来指导学生。
+- **管理员**可能会要求人工智能 _分析课程数据以识别覆盖范围的差距_。 人工智能可以总结结果或用代码将其可视化。
+- **教育者**可能会要求人工智能 _为目标受众和主题生成教学计划_。 AI可以按照指定的格式构建个性化计划。
+- **学生**可能会要求人工智能 _辅导他们学习困难的科目_。 人工智能现在可以通过适合学生水平的课程、结合提示和示例来指导学生。
 
-这只是冰山一角。 查看 [教育中的提示工程](https://github.com/microsoft/prompts-for-edu/tree/main?WT.mc_id=academic-105485-koreyst) - 一个由教育专家设计的开源提示库 ！ 尝试在沙箱中运行其中一些提示或使用 OpenAI Playground 看看会产生什么结果！
+这只是冰山一角。 查看 [教育中的提示工程](https://github.com/microsoft/prompts-for-edu/tree/main?WT.mc_id=academic-105485-koreyst) - 一个由教育专家设计的开源提示库 ！ _尝试在沙箱中运行其中一些提示或使用 OpenAI Playground 看看会产生什么结果！_
 
 <!--
 LESSON TEMPLATE:
@@ -62,10 +62,10 @@ Define it and explain why it is needed.
 
 ## 什么是提示工程?
 
-在本章中，我们将**提示工程**定义为设计和优化文本输入（提示）的过程，以便为指定的应用程序目标和模型提供一致且高质量的响应（完成）。 我们可以将其视为一个两步过程：
+在本章中，我们将**提示工程**定义为 _设计和优化_ 文本输入（提示）的过程，以便为指定的应用程序目标和模型提供一致且高质量的响应（补全）。 我们可以将其视为一个两步过程：
 
-- 设计指定模型和目标的初始提示
-- 通过迭代的方式提炼提示语以提高响应质量
+- _设计_ 指定模型和目标的初始提示
+- 通过迭代的方式 _提炼_ 提示语以提高响应质量
 
 这必然是一个反复尝试的过程，需要用户的直觉和努力才能获得最佳结果。 那么为什么它很重要呢？ 要回答这个问题，我们首先需要了解三个概念：
 
@@ -75,7 +75,7 @@ Define it and explain why it is needed.
 
 ### Tokenization
 
-LLM 将提示视为标记序列，其中不同的模型（或模型的版本）可以以不同的方式对同一提示进行标记。 由于 LLM 是根据标记（而不是原始文本）进行训练的，因此提示标记化的方式对生成的响应的质量有直接影响。
+LLM 将提示视为 _标记序列_，其中不同的模型（或模型的版本）可以以不同的方式对同一提示进行标记。 由于 LLM 是根据标记（而不是原始文本）进行训练的，因此提示标记化的方式对生成的响应的质量有直接影响。
 
 要直观地了解标记化的工作原理，请尝试使用如下所示的 [OpenAI Tokenizer](https://platform.openai.com/tokenizer?WT.mc_id=academic-105485-koreyst) 等工具。 复制您的提示 - 并查看如何将其转换为标记，注意空白字符和标点符号的处理方式。 请注意，此例子显示的是较旧的 LLM (GPT-3) - 因此使用较新的模型尝试此操作可能会产生不同的结果。
 
@@ -83,17 +83,11 @@ LLM 将提示视为标记序列，其中不同的模型（或模型的版本）�
 
 ### 概念: 基础模型
 
-Once a prompt is tokenized, the primary function of the ["Base LLM"](https://blog.openai.com/an-introduction-to-base-and-instruction-tuned-large-language-models-8de102c785a6?WT.mc_id=academic-105485-koreyst) (or Foundation model) is to predict the token in that sequence. Since LLMs are trained on massive text datasets, they have a good sense of the statistical relationships between tokens and can make that prediction with some confidence. Not that they don't understand the _meaning_ of the words in the prompt or token; they just see a pattern they can "complete" with their next prediction. They can continue predicting the sequence till terminated by user intervention or some pre-established condition.
-
-Want to see how prompt-based completion works? Enter the above prompt into the Azure OpenAI Studio [_Chat Playground_](https://oai.azure.com/playground?WT.mc_id=academic-105485-koreyst) with the default settings. The system is configured to treat prompts as requests for information - so you should see a completion that satisfies this context.
-
-But what if the user wanted to see something specific that met some criteria or task objective? This is where _instruction-tuned_ LLMs come into the picture.
-
-一旦提示被标记化，[“Base LLM”](https://blog.gopenai.com/an-introduction-to-base-and-instruction-tuned-large-language-models-8de102c785a6?WT.mc_id=academic-105485-koreyst)的主要功能 （或基础模型）是预测该序列中的标记。 由于 LLMs 接受过大量文本数据集的训练，因此他们对标记之间的统计关系有很好的理解，并且可以自信地做出预测。 并不是说他们不理解提示或标记中单词的含义，他们只是看到了一个可以通过下一个预测“完成”的模式。 他们可以继续预测序列，直到被用户干预或某些预先设定的条件终止。
+一旦提示被标记化，[“Base LLM”](https://blog.gopenai.com/an-introduction-to-base-and-instruction-tuned-large-language-models-8de102c785a6?WT.mc_id=academic-105485-koreyst)（或基础模型）的主要功能是预测该序列中的标记。 由于 LLMs 接受过大量文本数据集的训练，因此他们对标记之间的统计关系有很好的理解，并且可以自信地做出预测。 请注意它们不理解提示或标记中单词的 _含义_，它们只是看到了一个可以通过下一个预测“补全”的模式。 他们可以继续预测序列，直到被用户干预或某些预先设定的条件终止。
 
 想了解基于提示补全是如何工作的吗？ 使用默认设置将上述提示输入到 Azure OpenAI Studio [_Chat Playground_](https://oai.azure.com/playground?WT.mc_id=academic-105485-koreyst)。 系统配置会将提示视为信息请求 - 因此您应该看到满足此上下文的补全。
 
-但是，如果用户想要查看满足某些标准或任务目标的特定内容怎么办？ 这就是通过 LLMs 进行指令调整发挥作用的地方。
+但是，如果用户想要查看满足某些标准或任务目标的特定内容怎么办？ 这就是通过 LLMs 进行 _指令调整_ 发挥作用的地方。
 
 ![Base LLM Chat Completion](../../images/04-playground-chat-base.png?WT.mc_id=academic-105485-koreyst)
 
