@@ -369,7 +369,7 @@ Link to a copy of that Notebook with the prompts filled in and run, showing what
 
 ### 接下来，配置你的环境变量
 
-- 将存储库根目录中的“.env.copy”文件复制为“.env”并填写“OPENAI_API_KEY”值。 您可以在 [OpenAI Dashboard](https://beta.openai.com/account/api-keys?WT.mc_id=academic-105485-koreyst) 中找到您的 API 密钥。
+- 将存储库根目录中的`.env.copy`文件复制为`.env`并填写`OPENAI_API_KEY`值。 您可以在 [OpenAI Dashboard](https://beta.openai.com/account/api-keys?WT.mc_id=academic-105485-koreyst) 中找到您的 API 密钥。
 
 ### 接下来，打开 Jupyter Notebook
 
