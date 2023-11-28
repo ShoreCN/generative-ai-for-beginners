@@ -363,7 +363,7 @@ Link to a copy of that Notebook with the prompts filled in and run, showing what
 
 ### 首先，fork the repo，然后
 
--（推荐）启动 GitHub Codespaces
+- （推荐）启动 GitHub Codespaces
 - （或者）将 repo 克隆到本地设备并将其与 Docker Desktop 一起使用
 - （或者）使用您的笔记本运行时环境来打开笔记本。
 
